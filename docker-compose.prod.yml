@@ -1,0 +1,27 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - api1
+  api1:
+    build:
+      context: ./nest
+      dockerfile: Dockerfile_prod
+    container_name: api1
+    restart: always
+    env_file: .env
+    environment:
+      - ENV=development
+    ports:
+      - 3030:3030
+    volumes:
+      - "./nest:/usr/src/api1"
+      - "/usr/src/api1/node_modules"
+      - "/usr/src/api1/dist"
